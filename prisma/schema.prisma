@@ -27,6 +27,7 @@ model persona{
   nombre String @db.VarChar(15)
   apellido String @db.VarChar(15)
   email String @unique @db.VarChar(15)
+  hash_contrasena String
   fecha_nacimiento DateTime @db.Date
   fecha_creacion DateTime @default(now())
 
