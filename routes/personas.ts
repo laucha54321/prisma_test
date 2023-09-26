@@ -1,7 +1,8 @@
 import express from "express";
 import { hashPassword } from "../hashing";
-import { createPersona } from "../prisma";
+import { createPersona, getPersonas, getPersona, putPersona } from "../prisma";
 import { Persona } from "../models/interfaces";
+import { PrismaClientRustPanicError } from "@prisma/client/runtime/library";
 
 const router = express.Router();
 
@@ -25,6 +26,41 @@ router.post("", async (req, res, next) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+router.get("", async (req, res, next) => {
+  getPersonas()
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((error) => {
+      res.sendStatus(500);
+    });
+});
+
+router.get("/:id", async (req, res, next) => {
+  getPersona(req.params.id)
+    .then((data) => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.sendStatus(404);
+      }
+    })
+    .catch((error) => {
+      res.sendStatus(500);
+    });
+});
+
+router.put("/:id", async (req, res, next) => {
+  const params = { ID: req.params.id, data: req.body };
+  putPersona(params)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((error) => {
+      res.sendStatus(400);
+    });
 });
 
 export default router;
