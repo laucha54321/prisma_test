@@ -2,7 +2,6 @@ import express from "express";
 import { hashPassword } from "../hashing";
 import { createPersona, getPersonas, getPersona, putPersona } from "../prisma";
 import { Persona } from "../models/interfaces";
-import { PrismaClientRustPanicError } from "@prisma/client/runtime/library";
 
 const router = express.Router();
 

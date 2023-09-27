@@ -165,3 +165,14 @@ export async function inscribirCurso(id: string) {
   }
 }
 //#endregion
+
+//#region Auth
+export async function getPasswordHash(id: string) {
+  try {
+    const persona = await prisma.persona.findUnique({ where: { ID: id } });
+    return persona?.hash_contrasena;
+  } catch (error) {
+    return "000";
+  }
+}
+//#endregion
