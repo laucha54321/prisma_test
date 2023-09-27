@@ -4,12 +4,13 @@ import { inscribirCurso } from "../prisma";
 const router = express.Router();
 
 router.post("/:id", async (req, res, next) => {
-  await inscribirCurso(req.params.id)
+  const data = { id: req.params.id, email: req.body.email };
+  inscribirCurso(data)
     .then((data) => {
       res.send(data);
     })
     .catch((error) => {
-      res.sendStatus(400);
+      res.send(data);
     });
 });
 router.get("", async (req, res, next) => {});

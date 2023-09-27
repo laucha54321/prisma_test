@@ -9,34 +9,35 @@ require("dotenv").config({ path: ".../process.env" });
 const router = express.Router();
 
 router.post("", async (req, res, next) => {
-  const { ID, contrasena } = req.body;
+  const { email, contrasena } = req.body;
 
-  if (!ID) {
+  if (!email) {
     res.statusCode = 400;
     res.send("El formato del ID es incorrecto");
   } else {
-    const aux = await getPasswordHash(ID);
+    const aux = await getPasswordHash(email);
 
     if (aux !== undefined) {
       const validPass = await bcrypt.compare(contrasena, aux);
+
       if (validPass) {
         const accessToken = jwt.sign(
-          { id: ID },
+          { id: email },
           process.env.ACCESS_TOKEN_SECRET!,
           {
             expiresIn: "5h",
           }
         );
         res.send({
-          id: ID,
+          email: email,
           accessToken: accessToken,
         });
       } else {
-        res.status(401).send("Credenciales Incorrectas.");
+        res.status(400).send("Credenciales Incorrectas.");
       }
     } else {
-      res.statusCode = 500;
-      res.send("Error en el servidor vuelva a intentarlo.");
+      res.statusCode = 400;
+      res.send("Email incorrecto");
     }
   }
 });

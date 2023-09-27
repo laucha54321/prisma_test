@@ -5,7 +5,15 @@ const prisma = new PrismaClient();
 //#region Persona
 export async function createPersona(data: Persona) {
   try {
-    const user = await prisma.persona.create({ data });
+    const user = await prisma.persona.create({
+      data,
+      select: {
+        nombre: true,
+        apellido: true,
+        email: true,
+        fecha_nacimiento: true,
+      },
+    });
     return user;
   } catch (error) {
     return error;
@@ -14,7 +22,15 @@ export async function createPersona(data: Persona) {
 
 export async function getPersonas() {
   try {
-    const users = await prisma.persona.findMany();
+    const users = await prisma.persona.findMany({
+      select: {
+        ID: true,
+        nombre: true,
+        apellido: true,
+        email: true,
+        fecha_nacimiento: true,
+      },
+    });
     return users;
   } catch (error) {
     return error;
@@ -26,6 +42,13 @@ export async function getPersona(params: string) {
     const user = await prisma.persona.findUnique({
       where: {
         ID: params,
+      },
+      select: {
+        ID: true,
+        nombre: true,
+        apellido: true,
+        email: true,
+        fecha_nacimiento: true,
       },
     });
     return user;
@@ -42,6 +65,12 @@ export async function putPersona(params: any) {
         ID: params.ID,
       },
       data: params.data,
+      select: {
+        nombre: true,
+        apellido: true,
+        email: true,
+        fecha_nacimiento: true,
+      },
     });
 
     return user;
@@ -134,7 +163,6 @@ export async function getNota(params: string) {
 
 export async function putNota(params: any) {
   try {
-    delete params.data.ID;
     const nota = await prisma.nota.update({
       where: {
         ID: params.ID,
@@ -151,12 +179,16 @@ export async function putNota(params: any) {
 //#endregion
 
 //#region Persona_Curso
-export async function inscribirCurso(id: string) {
+export async function inscribirCurso(data: any) {
   try {
     const aux = await prisma.persona.update({
-      where: { ID: id },
+      where: { email: data.email },
       data: {
-        curso: { set: [{ ID: "97f3709d-df59-4997-8960-e385676c346b" }] },
+        curso: { set: [{ ID: data.id }] },
+      },
+      select: {
+        nombre: true,
+        apellido: true,
       },
     });
     return aux;
@@ -167,9 +199,11 @@ export async function inscribirCurso(id: string) {
 //#endregion
 
 //#region Auth
-export async function getPasswordHash(id: string) {
+export async function getPasswordHash(email: string) {
   try {
-    const persona = await prisma.persona.findUnique({ where: { ID: id } });
+    const persona = await prisma.persona.findUnique({
+      where: { email: email },
+    });
     return persona?.hash_contrasena;
   } catch (error) {
     return "000";

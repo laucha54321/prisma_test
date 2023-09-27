@@ -29,7 +29,8 @@ router.get("/:id", async (req, res, next) => {
       if (data) {
         res.send(data);
       } else {
-        res.sendStatus(404);
+        res.statusCode = 404;
+        res.send("El id no existe");
       }
     })
     .catch((error) => {

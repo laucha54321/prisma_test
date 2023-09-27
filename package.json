@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "generate": "npx prisma migrate dev --name init",
+    "generate": "npx prisma migrate dev --name init --schema ./src/prisma/schema.prisma",
     "dev": "nodemon src/index.ts"
   },
   "author": "",
