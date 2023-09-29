@@ -5,11 +5,12 @@ import cursoRouter from "./routes/cursos";
 import cursoPersonaRouter from "./routes/cursoPersona";
 import notaRouter from "./routes/nota";
 import loginRouter from "./routes/login";
+import authRouter from "./authRouter";
 
 const app = express();
 app.use(express.json());
-
 app.use(cors({ origin: "http://localhost:4200" }));
+app.use(authRouter);
 
 app.use("/personas", personasRouter);
 app.use("/cursos", cursoRouter);

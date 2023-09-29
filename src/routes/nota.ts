@@ -13,7 +13,7 @@ router.post("", async (req, res, next) => {
     });
 });
 router.get("", async (req, res, next) => {
-  await getNotas()
+  await getNotas(req.body.ID)
     .then((data) => {
       res.send(data);
     })

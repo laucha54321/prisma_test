@@ -1,0 +1,13 @@
+###
+POST http://127.0.0.1:8080/notas HTTP/1.1
+content-type: application/json
+authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImxhdXJlYW5vbGl2YUBnbWFpbC5jb20iLCJpYXQiOjE2OTYwMTg1MzUsImV4cCI6MTY5NjAzNjUzNX0.SXhgF0dTUdHmU2F5F2ae48d-HXPMQC7kH82Bu7NUrfY
+
+### Another request
+POST http://127.0.0.1:8080/login HTTP/1.1
+content-type: application/json
+
+{
+    "email":"laureanoliva@gmail.com",
+    "contrasena":"asdasd123"
+}

@@ -139,9 +139,9 @@ export async function createNota(data: Nota) {
   }
 }
 
-export async function getNotas() {
+export async function getNotas(id: string) {
   try {
-    const nota = await prisma.nota.findMany();
+    const nota = await prisma.nota.findMany({ where: { ID_Persona: id } });
     return nota;
   } catch (error) {
     return error;
@@ -201,10 +201,22 @@ export async function inscribirCurso(data: any) {
 //#region Auth
 export async function getPasswordHash(email: string) {
   try {
-    const persona = await prisma.persona.findUnique({
+    const hash = await prisma.persona.findUnique({
       where: { email: email },
+      select: { hash_contrasena: true },
     });
-    return persona?.hash_contrasena;
+    return hash?.hash_contrasena;
+  } catch (error) {
+    return "000";
+  }
+}
+export async function getID(email: string): Promise<string | undefined> {
+  try {
+    const ID = await prisma.persona.findUnique({
+      where: { email: email },
+      select: { ID: true },
+    });
+    return ID?.ID;
   } catch (error) {
     return "000";
   }
