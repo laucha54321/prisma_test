@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, cursoPersona } from "@prisma/client";
 import { Persona, Curso, Nota, CursoPersona } from "./models/types";
 const prisma = new PrismaClient();
 
@@ -219,4 +219,24 @@ export async function getID(email: string): Promise<string | undefined> {
     return "000";
   }
 }
+//#endregion
+
+//#region Auth_Profesor
+export async function esProfesor(
+  idCurso: string,
+  idProfesor: string
+): Promise<boolean> {
+  if (
+    await prisma.cursoPersona.findUnique({
+      where: {
+        ID_Persona_ID_Curso: { ID_Persona: idProfesor, ID_Curso: idCurso },
+      },
+    })
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 //#endregion

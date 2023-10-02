@@ -10,6 +10,7 @@ router.post("/:id", async (req, res, next) => {
     ID_Curso: req.params.id,
     categoria: req.body.categoria,
   };
+  console.log(data);
   inscribirCurso(data)
     .then((aux) => {
       res.send(aux);

@@ -1,17 +1,14 @@
 import express from "express";
-import { getNota, createNota, putNota, getNotas } from "../prisma";
-
+import { getNota, createNota, putNota, getNotas, esProfesor } from "../prisma";
+import { Nota } from "../models/types";
 const router = express.Router();
 
-type nota = {
-  descripcion: string;
-  nota: number;
-  ID_Persona: string;
-  ID_Curso: string;
-};
-
-router.post("", async (req, res, next) => {
-  await createNota(req.body)
+router.post("/:id", async (req, res, next) => {
+  let id = res.getHeader("id") as string;
+  console.log(req.params.id, id);
+  console.log(await esProfesor(req.params.id, id));
+  let aux: Nota = req.body;
+  await createNota(aux)
     .then((data) => {
       res.send(data);
     })
@@ -31,8 +28,8 @@ router.post("", async (req, res, next) => {
 // });
 
 router.get("/", async (req, res, next) => {
-  const aux = JSON.parse(JSON.stringify(res.getHeaders()));
-  getNota(aux.id)
+  const aux = res.getHeaders();
+  getNota(aux.id as string)
     .then((data) => {
       if (data) {
         res.send(data);

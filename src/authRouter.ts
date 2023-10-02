@@ -27,7 +27,8 @@ router.use(async (req, res, next) => {
       }
     });
   } else {
-    next();
+    res.statusCode = 400;
+    res.send("Request no permitido. No hay token.");
   }
 });
 

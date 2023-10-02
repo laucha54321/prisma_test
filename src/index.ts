@@ -10,13 +10,12 @@ import authRouter from "./authRouter";
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:4200" }));
+app.use("/login", loginRouter);
 app.use(authRouter);
-
 app.use("/personas", personasRouter);
 app.use("/cursos", cursoRouter);
 app.use("/notas", notaRouter);
 app.use("/curso", cursoPersonaRouter);
-app.use("/login", loginRouter);
 
 app.listen(8080, () => {
   console.log("Listening on Port 8080");
