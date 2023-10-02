@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Persona, Curso, Nota } from "./models/interfaces";
+import { Persona, Curso, Nota, CursoPersona } from "./models/types";
 const prisma = new PrismaClient();
 
 //#region Persona
@@ -130,6 +130,13 @@ export async function putCurso(params: any) {
 //#endregion
 
 //#region Notas
+type nota = {
+  descripcion: string;
+  nota: number;
+  ID_Persona: string;
+  ID_Curso: string;
+};
+
 export async function createNota(data: Nota) {
   try {
     const nota = await prisma.nota.create({ data });
@@ -150,12 +157,12 @@ export async function getNotas(id: string) {
 
 export async function getNota(params: string) {
   try {
-    const nota = await prisma.nota.findUnique({
+    const notas = (await prisma.nota.findFirst({
       where: {
         ID: params,
       },
-    });
-    return nota;
+    })) as nota;
+    return notas;
   } catch (error) {
     return error;
   }
@@ -179,18 +186,9 @@ export async function putNota(params: any) {
 //#endregion
 
 //#region Persona_Curso
-export async function inscribirCurso(data: any) {
+export async function inscribirCurso(data: CursoPersona) {
   try {
-    const aux = await prisma.persona.update({
-      where: { email: data.email },
-      data: {
-        curso: { set: [{ ID: data.id }] },
-      },
-      select: {
-        nombre: true,
-        apellido: true,
-      },
-    });
+    const aux = await prisma.cursoPersona.create({ data });
     return aux;
   } catch (error) {
     return error;

@@ -3,6 +3,13 @@ import { getNota, createNota, putNota, getNotas } from "../prisma";
 
 const router = express.Router();
 
+type nota = {
+  descripcion: string;
+  nota: number;
+  ID_Persona: string;
+  ID_Curso: string;
+};
+
 router.post("", async (req, res, next) => {
   await createNota(req.body)
     .then((data) => {
@@ -12,22 +19,25 @@ router.post("", async (req, res, next) => {
       res.sendStatus(400);
     });
 });
-router.get("", async (req, res, next) => {
-  await getNotas(req.body.ID)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((error) => {
-      res.sendStatus(404);
-    });
-});
-router.get("/:id", async (req, res, next) => {
-  await getNota(req.params.id)
+
+// router.get("", async (req, res, next) => {
+//   await getNotas(req.body.ID)
+//     .then((data) => {
+//       res.send(data);
+//     })
+//     .catch((error) => {
+//       res.sendStatus(404);
+//     });
+// });
+
+router.get("/", async (req, res, next) => {
+  const aux = JSON.parse(JSON.stringify(res.getHeaders()));
+  getNota(aux.id)
     .then((data) => {
       if (data) {
         res.send(data);
       } else {
-        res.sendStatus(404);
+        res.send("No se encontraron notas");
       }
     })
     .catch((error) => {

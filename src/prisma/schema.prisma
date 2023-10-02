@@ -15,11 +15,21 @@ model curso {
   ID      String        @id @default(uuid())
   descripcion String  @db.VarChar(255)
   nombre  String  @db.VarChar(25)
-
-  //Personas Inscriptas
-  persona persona[]
   //Notas de las Personas Inscriptas
   nota nota[]
+  //Profesores o etc de los cursos
+  cursoPersona cursoPersona[]
+}
+
+model cursoPersona{
+  persona persona @relation(fields: [ID_Persona], references: [ID])
+  ID_Persona String
+  
+  curso curso @relation(fields: [ID_Curso],references: [ID])
+  ID_Curso String
+  categoria String
+  
+  @@id([ID_Persona, ID_Curso])
 }
 
 model persona{
@@ -30,9 +40,7 @@ model persona{
   hash_contrasena String
   fecha_nacimiento DateTime @db.Date
   fecha_creacion DateTime @default(now())
-
-  //Cursos a los que esta Inscripto esta Persona
-  curso curso[]
+  cursoPersona cursoPersona[]
   //Notas en los distintos cursos de esta Persona
   nota nota[]
 

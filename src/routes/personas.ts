@@ -1,20 +1,20 @@
 import express from "express";
 import { hashPassword } from "../hashing";
 import { createPersona, getPersonas, getPersona, putPersona } from "../prisma";
-import { Persona } from "../models/interfaces";
 
 const router = express.Router();
+type persona = {
+  nombre: string;
+  apellido: string;
+  hash_contrasena: string;
+  email: string;
+  fecha_nacimiento: Date;
+};
 
 router.post("", async (req, res, next) => {
   try {
-    let aux: Persona = {
-      nombre: req.body.nombre,
-      apellido: req.body.apellido,
-      hash_contrasena: await hashPassword(req.body.hash_contrasena),
-      email: req.body.email,
-      fecha_nacimiento: new Date(req.body.fecha_nacimiento),
-    };
-
+    let aux = JSON.parse(req.body) as persona;
+    aux.hash_contrasena = await hashPassword(req.body.hash_contrasena);
     const aux1 = await createPersona(aux)
       .then((response) => {
         res.send(response);

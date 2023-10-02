@@ -1,16 +1,20 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import {} from "../prisma";
 import { getPasswordHash } from "../prisma";
 
 require("dotenv").config({ path: ".../process.env" });
 
 const router = express.Router();
 
-router.post("", async (req, res, next) => {
-  const { email, contrasena } = req.body;
+type credenciales = {
+  email: string;
+  contrasena: string;
+};
 
+router.post("", async (req, res, next) => {
+  const { email, contrasena }: credenciales = req.body;
+  console.log(email, contrasena);
   if (!email) {
     res.statusCode = 400;
     res.send("El formato del ID es incorrecto");

@@ -3,8 +3,14 @@ import { createCurso, getCursos, getCurso, putCurso } from "../prisma";
 
 const router = express.Router();
 
+type curso = {
+  descripcion: string;
+  nombre: string;
+};
+
 router.post("", async (req, res, next) => {
-  await createCurso(req.body)
+  let curso: curso = req.body;
+  await createCurso(curso)
     .then((data) => {
       res.send(data);
     })
@@ -48,6 +54,8 @@ router.put("/:id", async (req, res, next) => {
       res.sendStatus(400);
     });
 });
+
+router.get("/profesor", async (req, res, next) => {});
 
 router.delete("", async (req, res, next) => {});
 
