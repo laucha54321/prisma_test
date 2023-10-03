@@ -130,12 +130,6 @@ export async function putCurso(params: any) {
 //#endregion
 
 //#region Notas
-type nota = {
-  descripcion: string;
-  nota: number;
-  ID_Persona: string;
-  ID_Curso: string;
-};
 
 export async function createNota(data: Nota) {
   try {
@@ -148,7 +142,46 @@ export async function createNota(data: Nota) {
 
 export async function getNotas(id: string) {
   try {
-    const nota = await prisma.nota.findMany({ where: { ID_Persona: id } });
+    const nota = await prisma.nota.findMany({
+      where: { ID_Persona: id },
+      select: {
+        nota: true,
+        descripcion: true,
+        curso: true,
+        ID_Persona: true,
+        ID: true,
+      },
+    });
+    return nota;
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function getNotasProfe(idCurso: string) {
+  try {
+    const nota = await prisma.nota.findMany({
+      where: { ID_Curso: idCurso },
+      select: {
+        ID: true,
+        nota: true,
+        descripcion: true,
+        curso: {
+          select: {
+            nombre: true,
+            ID: true,
+          },
+        },
+        persona: {
+          select: {
+            nombre: true,
+            apellido: true,
+            email: true,
+            ID: true,
+          },
+        },
+      },
+    });
     return nota;
   } catch (error) {
     return error;
@@ -157,11 +190,18 @@ export async function getNotas(id: string) {
 
 export async function getNota(params: string) {
   try {
-    const notas = (await prisma.nota.findFirst({
+    const notas = await prisma.nota.findFirst({
       where: {
         ID: params,
       },
-    })) as nota;
+      select: {
+        nota: true,
+        descripcion: true,
+        curso: true,
+        ID_Persona: true,
+        ID: true,
+      },
+    });
     return notas;
   } catch (error) {
     return error;
