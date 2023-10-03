@@ -15,7 +15,7 @@ app.use(authRouter);
 app.use("/personas", personasRouter);
 app.use("/cursos", cursoRouter);
 app.use("/notas", notaRouter);
-app.use("/curso", cursoPersonaRouter);
+app.use("/inscribir", cursoPersonaRouter);
 
 app.listen(8080, () => {
   console.log("Listening on Port 8080");
